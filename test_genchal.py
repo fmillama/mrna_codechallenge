@@ -10,7 +10,7 @@ class TestGenChal(unittest.TestCase):
         mock2='ACG ACG UAA ACG'
         mock3='ACG ACG UAA AC'
         mock4='ACG UAA ECG'
-        result1=[['ACG','ACG','UAA'],['ACG','UAA'],['UAA']]
+        result1=[['ACG','ACG','UAA'],['ACG','UAA']]
         self.assertRaises(genchal.InvalidArgument,genchal.genex,25)
         self.assertEqual(genchal.genex(mock1), result1)
         self.assertRaises(genchal.InvalidEndingError,genchal.genex,mock2)
