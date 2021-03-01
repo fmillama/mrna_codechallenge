@@ -4,9 +4,7 @@ Processing mRNA Sequences - Code Challenge 2021
 # mrna_codechallenge
 Processing mRNA Sequences - Code Challenge 2021
 
-Francesc Millà Martínez. Intern at Capgeimin's AD Center (valencia)
-Two main files: genchal.py and test_genchal.py
-Found in https://github.com/fmillama/mrna_codechallenge/tree/master/
+Francesc Millà Martínez. Intern at Capgeimin's AD Center (Valencia). Found in https://github.com/fmillama/mrna_codechallenge/tree/master/ . Two main files: genchal.py and test_genchal.py
 
 genchal.py
 1. Defines four exception classes:
