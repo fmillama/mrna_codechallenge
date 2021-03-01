@@ -6,14 +6,14 @@ Processing mRNA Sequences - Code Challenge 2021
 
 Francesc Millà Martínez. Intern at Capgeimin's AD Center (valencia)
 Two main files: genchal.py and test_genchal.py
-Found in https://github.com/fmillama/mrna_codechallenge/master/
+Found in https://github.com/fmillama/mrna_codechallenge/tree/master/
 
 genchal.py
 1. Defines four exception classes:
-  InvalidArgument
-  InvalidLetterError
-  InvalidLengthError
-  InvalidEndingError
+  InvalidArgument. 
+  InvalidLetterError. 
+  InvalidLengthError. 
+  InvalidEndingError. 
 2. Defines function "genargs(inp)":
   Determines whether input "inp" is a file at the directory with extension .txt and generates a text stream.
   Otherwise, determines whether input is a string and creates an in-memory text stream.
