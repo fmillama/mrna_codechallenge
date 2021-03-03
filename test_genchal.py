@@ -1,21 +1,41 @@
 import unittest
 import io
 import os
-import genchal
+from genchal import genbuild
+from genchal import genunf
+from genchal import genproc
 
 class TestGenChal(unittest.TestCase):
 
-    def test_genex(self):
-        mock1='ACg ACG\nUAAACG uAA\nUAA'
-        mock2='ACG ACG UAA ACG'
-        mock3='ACG ACG UAA AC'
-        mock4='ACG UAA ECG'
-        result1=[['ACG','ACG','UAA'],['ACG','UAA']]
-        self.assertRaises(genchal.InvalidArgument,genchal.genex,25)
-        self.assertEqual(genchal.genex(mock1), result1)
-        self.assertRaises(genchal.InvalidEndingError,genchal.genex,mock2)
-        self.assertRaises(genchal.InvalidLengthError,genchal.genex,mock3)
-        self.assertRaises(genchal.InvalidLetterError,genchal.genex,mock4)
+    def test_genbuild(self):
+        mock1=genbuild('A','UA',['UCC']) #completes gene
+        self.assertEqual(mock1,[['UCC','UAA'],'',[]])
+        mock2=genbuild('U','UA',['UCC']) #completes codon
+        self.assertEqual(mock2,[[],'',['UCC','UAU']])
+        mock3=genbuild('U','U',['UCC']) #adds character
+        self.assertEqual(mock3,[[],'UU',['UCC']])
+        mock4=genbuild('A','UA',[]) #ignores single codon gene
+        self.assertEqual(mock4,[[],'',[]])
+
+    def test_genunf(self):
+        mock1=genunf([],'') #passes empty arguments
+        self.assertEqual(mock1,['',''])
+        mock2=genunf(['UCC'],'') #unfinished gene warning
+        self.assertEqual(mock2,["Gene: ['UCC']. ",''])
+        mock3=genunf([],'U') #unfinished codon warning
+        self.assertEqual(mock3,['',"Codon: U."])
+        mock4=genunf(['UCC'],'U')
+        self.assertEqual(mock4,["Gene: ['UCC']. ","Codon: U."])
+
+    def test_genproc(self):
+        mock1=[gen for gen in genproc(io.StringIO('ACg ACG UAAACG uAA UAACCCUAA'))] #executes without errors and ignores consecutive stop codon
+        self.assertEqual(mock1,[['ACG', 'ACG', 'UAA'],['ACG', 'UAA'],['CCC', 'UAA']])
+        mock2=[gen for gen in genproc(io.StringIO('ACG ACG UAA ACG'))] #yields one gene and invalid ending error
+        self.assertEqual(mock2,[['ACG', 'ACG', 'UAA'], "Error: end of stream reached with unfinished elements. Gene: ['ACG']. \nSequence must have length divisible by 3 and end in stop codon UAG, UGA or UAA."])
+        mock3=[gen for gen in genproc(io.StringIO('ACG ACG UAA AC'))] #yields one gene and invalid length error
+        self.assertEqual(mock3,[['ACG', 'ACG', 'UAA'], 'Error: end of stream reached with unfinished elements. Codon: AC.\nSequence must have length divisible by 3 and end in stop codon UAG, UGA or UAA.'])
+        mock4=[gen for gen in genproc(io.StringIO('ACG UAA ECG'))] #yields one gene and invalid letter error
+        self.assertEqual(mock4,[['ACG', 'UAA'], 'Error: will ignore E found at line 1, column 7. Letters must be A, C, G or U.', 'Error: end of stream reached with unfinished elements. Codon: CG.\nSequence must have length divisible by 3 and end in stop codon UAG, UGA or UAA.'])
 
 if __name__=='__main__':
     unittest.main()
