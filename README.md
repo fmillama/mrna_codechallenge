@@ -1,44 +1,24 @@
 # mrna_codechallenge
 Processing mRNA Sequences - Code Challenge 2021
 
-# mrna_codechallenge
-Processing mRNA Sequences - Code Challenge 2021
-
-Francesc Millà Martínez. Intern at Capgeimin's AD Center (Valencia). Found in https://github.com/fmillama/mrna_codechallenge/tree/master/ . Two main files: genchal.py and test_genchal.py
-
-genchal.py
-1. Defines four exception classes:
-  InvalidArgument. 
-  InvalidLetterError. 
-  InvalidLengthError. 
-  InvalidEndingError. 
-2. Defines function "genargs(inp)":
-  Determines whether input "inp" is a file at the directory with extension .txt and generates a text stream.
-  Otherwise, determines whether input is a string and creates an in-memory text stream.
-  Otherwise raises InvalidArgument error.
-3. Defines generator function "genproc(inp)" to meet the Challenge 2 requirements. 
-Once the generator with an argument is defined, each next() execution will yield a complete gene in the form of a list of strings, or else an error.
-Execution terminates if next() yields an error:
-  Calls genargs to generate text stream.
-  Reads lines from text stream in a for loop with a line counter.
-  Omits comment lines starting with '>'.
-  Removes whitespace from lines and switches to uppercase.
-  Reads columns from text stream lines in a for loop with a column counter.
-  Checks whether each column matches letters A, C, G, U, otherwise raises InvalidLetterError.
-  Adds columns to empty string "codon".
-  Checks whether "codon" has reached length 3.
-  If so, adds "codon" to empty list "codonlist", then checks whether "codon" is a stopcode UAG, UGA, UAA.
-  If so, yields and resets "codonlist" and "codon". Otherwise it only resets "codon".
-  When all lines have been read, checks whether "codon" and "codonlist" are unfinished. 
-  If so, raises InvalidLengthError or InvalidEndingError respectively. 
-  Otherwise prints 'Process successful' and terminates.
-4. Defines function "genex(inp)" to meet the Challenge 1 requirements:
-  Runs generator function "genproc" and creates a list comprehension with all genes yielded, this is, a list of lists of strings.
-  Will not return a list if any of the four exceptions defined are raised.
-
-
-test_genchal.py
-1. Defines "test_genex(self)" unit test.
-  Defines a set of mock data.
-  Runs 5 assert methods to check whether "genchal.genex" provides edsired output.
-  
+- Download folder at https://github.com/fmillama/mrna_codechallenge/tree/master 
+- Execute main.py on terminal to run processor. Python 3 is required.
+- Terminal will demand inputs:
+  - First: 
+    - Select 1 for a local .txt file. Then, enter filepath. An invalid extension or a path not found in the local directory will raise an exception.
+    - Select 2 for a string. Then, enter lines of text followed by a blank line to be processed as a string.
+  - Second:
+    - Select 1 to process all input and print a single list of genes or a single error message.
+    - Select 2 to process all input and print each gene and error message in order until the end of file.
+    - Select 3 to print the first gene or error message in the file. Then press enter to print each subsequent gene or error message.
+- For Challenge 1 select string input, provide string and lastly select 1 to return a list of genes or a single error message.
+- Possible error messages:
+  - Characters that are not A, C, G or U will not be processed. Returns invalid character with line and column position.
+  - Sequence length of valid characters must be divisible by 3. Returns an unfinished codon at the end of the file.
+  - Final codon must match stop codons UAG, UGA or UAA. Returns an unfinished gene at the end of the file.
+- The processor will print warnings regardless of mode:
+  - Input between the a comment character '>' and the end of line will not be processed.
+  - Comments are printed for clarity.
+  - Reports on unfinished genes or codons once a comment line is reached. These elements will not be reset.
+  - Reports on skipped single codon genes.
+- Execute test_genchal.py to run tests.
